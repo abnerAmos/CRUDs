@@ -7,7 +7,6 @@ public record DocumentResponse(
     Long id,
     String documentType,
     String description,
-    String inclusionDate,
-    String updateDate
+    String inclusionDate
 ) {
 }

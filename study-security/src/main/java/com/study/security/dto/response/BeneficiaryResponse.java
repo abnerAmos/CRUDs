@@ -11,7 +11,6 @@ public record BeneficiaryResponse(
     String phone,
     String birthday,
     String inclusionDate,
-    String updateDate,
     List<DocumentResponse> documents
 ) {
 }

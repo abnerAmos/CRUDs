@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.study.security.util.DateUtil.formatDate;
 
@@ -50,8 +49,7 @@ public class BeneficiaryImpl implements BeneficiaryService {
                         document.setInclusionDate(LocalDate.now());
                         document.setBeneficiary(beneficiary);
                         return document;
-                    })
-                    .toList();
+                    }).toList();
 
             documentRepository.saveAll(documents);
             return responseCreate(beneficiary, documents);
@@ -68,7 +66,6 @@ public class BeneficiaryImpl implements BeneficiaryService {
                 beneficiary.getPhone(),
                 formatDate(beneficiary.getBirthday()),
                 formatDate(beneficiary.getInclusionDate()),
-                null,
                 documents(document)
         );
     }
@@ -79,10 +76,8 @@ public class BeneficiaryImpl implements BeneficiaryService {
                         doc.getId(),
                         doc.getDocumentType(),
                         doc.getDescription(),
-                        formatDate(doc.getInclusionDate()),
-                        null
-                ))
-                .collect(Collectors.toList());
+                        formatDate(doc.getInclusionDate())
+                )).toList();
     }
 
     @Override
