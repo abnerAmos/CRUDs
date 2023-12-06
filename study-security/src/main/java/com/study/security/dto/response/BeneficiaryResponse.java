@@ -1,8 +1,12 @@
 package com.study.security.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.study.security.model.Beneficiary;
+import com.study.security.util.DateUtil;
 
 import java.util.List;
+
+import static com.study.security.util.DateUtil.formatDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BeneficiaryResponse(
@@ -13,4 +17,18 @@ public record BeneficiaryResponse(
     String inclusionDate,
     List<DocumentResponse> documents
 ) {
+//    public BeneficiaryResponse(Beneficiary beneficiary) {
+//        this(
+//                beneficiary.getId(),
+//                beneficiary.getName(),
+//                beneficiary.getPhone(),
+//                formatDate(beneficiary.getBirthday()),
+//                formatDate(beneficiary.getInclusionDate()),
+//                beneficiary.getDocument());
+//    }
+    /* Gerando um construtor e passando como parâmetro o próprio objeto podemos
+    * retornar a lista com um stream e map.
+    *
+    * Exemplo: beneficiaryRepository.findAll().stream.map(BeneficiaryResponse::new);
+    * record começa a ficar responsável também por construir o objeto de resposta*/
 }

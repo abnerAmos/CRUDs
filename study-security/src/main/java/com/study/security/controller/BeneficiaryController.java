@@ -8,6 +8,9 @@ import com.study.security.service.BeneficiaryService;
 import com.study.security.service.DocumentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,9 +42,13 @@ public class BeneficiaryController {
         return ResponseEntity.ok().body(beneficiaryService.getById(id));
     }
 
+    /* Para paginar basta apenas passar no fim da url... ?size=1&page=1;
+    * Caso não for informado retornará a quantidade padrão de itens: 20;
+    * É possivel ordenar através do parâmetro sort e atributo... ?sort=name;
+    * Com @PageableDefault é possivel alterar o retorno padrão, caso não informado page, size ou sort. */
     @GetMapping("/list-beneficiary")
-    public ResponseEntity<List<Beneficiary>> listBeneficiary () {
-        return ResponseEntity.ok().body(beneficiaryService.findAll());
+    public ResponseEntity<Page<Beneficiary>> listBeneficiary(@PageableDefault(size = 10, sort = {"name"}) Pageable pageable) {
+        return ResponseEntity.ok().body(beneficiaryService.findAll(pageable));
     }
 
     @GetMapping("/list-documents/{id}")

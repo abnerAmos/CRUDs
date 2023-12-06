@@ -12,6 +12,8 @@ import com.study.security.repository.DocumentRepository;
 import com.study.security.service.BeneficiaryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,8 +130,8 @@ public class BeneficiaryImpl implements BeneficiaryService {
     }
 
     @Override
-    public List<Beneficiary> findAll() {
-        List<Beneficiary> beneficiaries = beneficiaryRepository.findAll();
+    public Page<Beneficiary> findAll(Pageable pageable) {
+        Page<Beneficiary> beneficiaries = beneficiaryRepository.findAll(pageable);
         if (beneficiaries.isEmpty()) {
             log.error("Não há beneficiários registrados.");
             throw new BeneficiaryNotFoundException("Não há beneficiários registrados.");
