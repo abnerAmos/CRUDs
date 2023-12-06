@@ -5,10 +5,10 @@ Cada projeto é simples que fazem as 4 operações padrões, porem cada um com u
 ## CRUDs inclusos:
 
 - **study-security:**
-Foco desse projeto está no Spring Security para autenticação e autorização com JWT.
+<br>Foco desse projeto está no Spring Security para autenticação e autorização com JWT.
 
 - **propose-for-test:**
-Criado para um teste proposto para uma possivel vaga de desenvolvedor.
+<br>Criado para um teste proposto para uma possivel vaga de desenvolvedor.
 
 - **study-microsservices-payment:**
-Projeto de um serviço de pagamento criado para estudo de integração entre microsserviços.
+<br>Projeto de um serviço de pagamento criado para estudo de integração entre microsserviços.
