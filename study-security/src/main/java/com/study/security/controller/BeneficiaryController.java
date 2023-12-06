@@ -30,7 +30,7 @@ public class BeneficiaryController {
         BeneficiaryResponse beneficiary = beneficiaryService.registerBeneficiary(request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath("/beneficiary/{id}")
-                .buildAndExpand(beneficiary.getId()).toUri();
+                .buildAndExpand(beneficiary.id()).toUri();
         return ResponseEntity.created(uri).body(beneficiary);
     }
 
@@ -50,9 +50,9 @@ public class BeneficiaryController {
     }
 
     @PatchMapping("/update-beneficiary/{id}")
-    public ResponseEntity<BeneficiaryResponse> updateBeneficiary(@PathVariable Long id,
+    public ResponseEntity<Beneficiary> updateBeneficiary(@PathVariable Long id,
                                                                  @RequestBody BeneficiaryRequest request) {
-        BeneficiaryResponse response = beneficiaryService.updateBeneficiary(id, request);
+        Beneficiary response = beneficiaryService.updateBeneficiary(id, request);
         return ResponseEntity.ok().body(response);
     }
 

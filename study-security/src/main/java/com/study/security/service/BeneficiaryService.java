@@ -10,7 +10,7 @@ public interface BeneficiaryService {
 
     BeneficiaryResponse registerBeneficiary(BeneficiaryRequest beneficiaryRequest);
 
-    BeneficiaryResponse updateBeneficiary(Long id, BeneficiaryRequest request);
+    Beneficiary updateBeneficiary(Long id, BeneficiaryRequest request);
 
     void deleteBeneficiary(Long id);
 

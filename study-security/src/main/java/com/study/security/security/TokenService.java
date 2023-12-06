@@ -35,9 +35,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    // specify an specific claim validations
                     .withIssuer("Project for evaluation")
-                    // reusable verifier instance
                     .build()
                     .verify(token)
                     .getSubject();

@@ -36,17 +36,17 @@ public class BeneficiaryImpl implements BeneficiaryService {
     public BeneficiaryResponse registerBeneficiary(BeneficiaryRequest beneficiaryRequest) {
         try {
             Beneficiary beneficiary = new Beneficiary();
-            beneficiary.setName(beneficiaryRequest.getName());
-            beneficiary.setPhone(beneficiaryRequest.getPhone());
-            beneficiary.setBirthday(formatDate(beneficiaryRequest.getBirthday()));
+            beneficiary.setName(beneficiaryRequest.name());
+            beneficiary.setPhone(beneficiaryRequest.phone());
+            beneficiary.setBirthday(formatDate(beneficiaryRequest.birthday()));
             beneficiary.setInclusionDate(LocalDate.now());
             beneficiaryRepository.save(beneficiary);
 
-            List<Document> documents =  beneficiaryRequest.getDocuments().stream()
+            List<Document> documents =  beneficiaryRequest.documents().stream()
                     .map(request -> {
                         Document document = new Document();
-                        document.setDocumentType(request.getDocumentType());
-                        document.setDescription(request.getDescription());
+                        document.setDocumentType(request.documentType());
+                        document.setDescription(request.description());
                         document.setInclusionDate(LocalDate.now());
                         document.setBeneficiary(beneficiary);
                         return document;
@@ -62,41 +62,42 @@ public class BeneficiaryImpl implements BeneficiaryService {
     }
 
     public BeneficiaryResponse responseCreate(Beneficiary beneficiary, List<Document> document) throws BeneficiaryNotSaveException {
-        BeneficiaryResponse beneficiaryResponse = new BeneficiaryResponse();
-        beneficiaryResponse.setId(beneficiary.getId());
-        beneficiaryResponse.setName(beneficiary.getName());
-        beneficiaryResponse.setPhone(beneficiary.getPhone());
-        beneficiaryResponse.setBirthday(formatDate(beneficiary.getBirthday()));
-        beneficiaryResponse.setInclusionDate(formatDate(beneficiary.getInclusionDate()));
+        return new BeneficiaryResponse(
+                beneficiary.getId(),
+                beneficiary.getName(),
+                beneficiary.getPhone(),
+                formatDate(beneficiary.getBirthday()),
+                formatDate(beneficiary.getInclusionDate()),
+                null,
+                documents(document)
+        );
+    }
 
-        List<DocumentResponse> documents = document.stream()
-                .map(doc -> {
-                    DocumentResponse response = new DocumentResponse();
-                    response.setId(doc.getId());
-                    response.setDocumentType(doc.getDocumentType());
-                    response.setDescription(doc.getDescription());
-                    response.setInclusionDate(formatDate(doc.getInclusionDate()));
-                    return response;
-                })
+    private List<DocumentResponse> documents(List<Document> documents) {
+        return documents.stream()
+                .map(doc -> new DocumentResponse(
+                        doc.getId(),
+                        doc.getDocumentType(),
+                        doc.getDescription(),
+                        formatDate(doc.getInclusionDate()),
+                        null
+                ))
                 .collect(Collectors.toList());
-
-        beneficiaryResponse.setDocuments(documents);
-        return beneficiaryResponse;
     }
 
     @Override
-    public BeneficiaryResponse updateBeneficiary(Long id, BeneficiaryRequest request) {
+    public Beneficiary updateBeneficiary(Long id, BeneficiaryRequest request) {
         try {
             Beneficiary beneficiary = beneficiaryRepository.findById(id)
                     .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado."));
 
-            beneficiary.setName(request.getName());
-            beneficiary.setPhone(request.getPhone());
-            beneficiary.setBirthday(formatDate(request.getBirthday()));
+            beneficiary.setName(request.name());
+            beneficiary.setPhone(request.phone());
+            beneficiary.setBirthday(formatDate(request.birthday()));
             beneficiary.setUpdateDate(LocalDate.now());
 
             beneficiaryRepository.save(beneficiary);
-            return responseUpdate(beneficiary);
+            return beneficiary;
         } catch (BeneficiaryNotSaveException e) {
             log.error("Erro ao registrar beneficiário: {}", e.getMessage());
             throw new BeneficiaryNotSaveException("Erro ao processar solicitação.");
@@ -104,18 +105,6 @@ public class BeneficiaryImpl implements BeneficiaryService {
             log.error("Erro ao encontrar beneficiário: {}", e.getMessage());
             throw new BeneficiaryNotFoundException("Beneficiário nao encontrado.");
         }
-
-    }
-
-    public BeneficiaryResponse responseUpdate(Beneficiary beneficiary) throws BeneficiaryNotSaveException {
-        BeneficiaryResponse beneficiaryResponse = new BeneficiaryResponse();
-        beneficiaryResponse.setId(beneficiary.getId());
-        beneficiaryResponse.setName(beneficiary.getName());
-        beneficiaryResponse.setPhone(beneficiary.getPhone());
-        beneficiaryResponse.setBirthday(formatDate(beneficiary.getBirthday()));
-        beneficiaryResponse.setUpdateDate(formatDate(beneficiary.getUpdateDate()));
-
-        return beneficiaryResponse;
     }
 
     @Transactional
