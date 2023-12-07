@@ -58,7 +58,7 @@ public class BeneficiaryController {
 
     @PatchMapping("/update-beneficiary/{id}")
     public ResponseEntity<Beneficiary> updateBeneficiary(@PathVariable Long id,
-                                                                 @RequestBody BeneficiaryRequest request) {
+                                                         @RequestBody BeneficiaryRequest request) {
         Beneficiary response = beneficiaryService.updateBeneficiary(id, request);
         return ResponseEntity.ok().body(response);
     }

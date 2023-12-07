@@ -21,8 +21,7 @@ public class DocumentImpl implements DocumentService {
     public List<Document> getDocumentsByBeneficiary(Long id) {
         List<Document> documents = documentRepository.listAllDocumentsByBeneficiaryId(id);
         if (documents.isEmpty()) {
-            log.error("Beneficiário não possui documentos vinculados com id: " + id);
-            throw new DocumentNotFoundException("Não há documentos vinculados ao beneficiário.");
+            throw new DocumentNotFoundException("Não há documentos vinculados ao beneficiário com id: " + id);
         }
 
         return documents;

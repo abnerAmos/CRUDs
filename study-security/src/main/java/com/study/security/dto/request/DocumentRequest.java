@@ -1,4 +1,9 @@
 package com.study.security.dto.request;
 
-public record DocumentRequest(String documentType, String description) {
+import jakarta.validation.constraints.NotBlank;
+
+public record DocumentRequest(
+        @NotBlank
+        String documentType,
+        String description) {
 }

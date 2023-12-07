@@ -54,9 +54,10 @@ public class BeneficiaryImpl implements BeneficiaryService {
                     }).toList();
 
             documentRepository.saveAll(documents);
+
+            log.info("Beneficiário registrado com sucesso!");
             return responseCreate(beneficiary, documents);
         } catch (BeneficiaryNotSaveException e) {
-            log.error("Erro ao registrar beneficiário: {}", e.getMessage());
             throw new BeneficiaryNotSaveException("Erro ao registrar beneficiário.");
         }
     }
@@ -82,58 +83,48 @@ public class BeneficiaryImpl implements BeneficiaryService {
                 )).toList();
     }
 
+    @Transactional
     @Override
     public Beneficiary updateBeneficiary(Long id, BeneficiaryRequest request) {
         try {
             Beneficiary beneficiary = beneficiaryRepository.findById(id)
-                    .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado."));
+                    .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado com o id: " + id));
 
-            beneficiary.setName(request.name());
-            beneficiary.setPhone(request.phone());
-            beneficiary.setBirthday(formatDate(request.birthday()));
+            if (request.name() != null)
+                beneficiary.setName(request.name());
+            if (request.phone() != null)
+                beneficiary.setPhone(request.phone());
+            if (request.birthday() != null)
+                beneficiary.setBirthday(formatDate(request.birthday()));
             beneficiary.setUpdateDate(LocalDate.now());
 
-            beneficiaryRepository.save(beneficiary);
+            log.info("Beneficiário atualizado com sucesso!");
             return beneficiary;
         } catch (BeneficiaryNotSaveException e) {
-            log.error("Erro ao registrar beneficiário: {}", e.getMessage());
             throw new BeneficiaryNotSaveException("Erro ao processar solicitação.");
-        } catch (BeneficiaryNotFoundException e) {
-            log.error("Erro ao encontrar beneficiário: {}", e.getMessage());
-            throw new BeneficiaryNotFoundException("Beneficiário nao encontrado.");
         }
     }
 
     @Transactional
     @Override
     public void deleteBeneficiary(Long id) {
-        try {
-            Beneficiary beneficiary = beneficiaryRepository.findById(id)
-                    .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado com o id: " + id));
+        Beneficiary beneficiary = beneficiaryRepository.findById(id)
+                .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado com o id: " + id));
 
-            beneficiaryRepository.delete(beneficiary);
-        } catch (BeneficiaryNotFoundException e) {
-            log.error("Erro ao excluir: {}", e.getMessage());
-            throw new BeneficiaryNotFoundException("Não foi possivel excluir beneficiário.");
-        }
+        beneficiaryRepository.delete(beneficiary);
+        log.info("Beneficiário excluido com sucesso!");
     }
 
     @Override
     public Beneficiary getById(Long id) {
-        try {
-            return beneficiaryRepository.findById(id)
+        return beneficiaryRepository.findById(id)
                     .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado com o id: " + id));
-        } catch (BeneficiaryNotFoundException e) {
-            log.error(e.getMessage());
-            throw new BeneficiaryNotFoundException("Beneficiário nao encontrado.");
-        }
     }
 
     @Override
     public Page<Beneficiary> findAll(Pageable pageable) {
         Page<Beneficiary> beneficiaries = beneficiaryRepository.findAll(pageable);
         if (beneficiaries.isEmpty()) {
-            log.error("Não há beneficiários registrados.");
             throw new BeneficiaryNotFoundException("Não há beneficiários registrados.");
         }
 
