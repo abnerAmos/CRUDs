@@ -41,6 +41,7 @@ public class BeneficiaryImpl implements BeneficiaryService {
             beneficiary.setPhone(beneficiaryRequest.phone());
             beneficiary.setBirthday(formatDate(beneficiaryRequest.birthday()));
             beneficiary.setInclusionDate(LocalDate.now());
+            beneficiary.setActive(true);
             beneficiaryRepository.save(beneficiary);
 
             List<Document> documents =  beneficiaryRequest.documents().stream()
@@ -111,7 +112,9 @@ public class BeneficiaryImpl implements BeneficiaryService {
         Beneficiary beneficiary = beneficiaryRepository.findById(id)
                 .orElseThrow(() -> new BeneficiaryNotFoundException("Beneficiário nao encontrado com o id: " + id));
 
-        beneficiaryRepository.delete(beneficiary);
+        beneficiary.setActive(false);
+//        função utilizada para exclusão definitiva no banco de dados
+//        beneficiaryRepository.delete(beneficiary);
         log.info("Beneficiário excluido com sucesso!");
     }
 
@@ -123,7 +126,7 @@ public class BeneficiaryImpl implements BeneficiaryService {
 
     @Override
     public Page<Beneficiary> findAll(Pageable pageable) {
-        Page<Beneficiary> beneficiaries = beneficiaryRepository.findAll(pageable);
+        Page<Beneficiary> beneficiaries = beneficiaryRepository.findAllByActiveTrue(pageable);
         if (beneficiaries.isEmpty()) {
             throw new BeneficiaryNotFoundException("Não há beneficiários registrados.");
         }

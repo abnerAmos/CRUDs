@@ -40,11 +40,13 @@ public class Mocks implements CommandLineRunner {
         beneficiary1.setBirthday(LocalDate.now());
         beneficiary1.setInclusionDate(LocalDate.now());
         beneficiary1.setUpdateDate(LocalDate.now());
+        beneficiary1.setActive(true);
 
         Beneficiary beneficiary2 = new Beneficiary();
         beneficiary2.setName("Sicrano da Silva");
         beneficiary2.setPhone("11912345678");
         beneficiary2.setBirthday(LocalDate.now());
+        beneficiary2.setActive(true);
 
         Document document1 = new Document();
         document1.setDocumentType("CPF");

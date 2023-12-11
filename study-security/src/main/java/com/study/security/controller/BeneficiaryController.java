@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -29,11 +30,9 @@ public class BeneficiaryController {
     DocumentService documentService;
 
     @PostMapping("/register")
-    public ResponseEntity<BeneficiaryResponse> register(@RequestBody @Valid BeneficiaryRequest request) {
+    public ResponseEntity<BeneficiaryResponse> register(@RequestBody @Valid BeneficiaryRequest request, UriComponentsBuilder uriBuilder) {
         BeneficiaryResponse beneficiary = beneficiaryService.registerBeneficiary(request);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .replacePath("/beneficiary/{id}")
-                .buildAndExpand(beneficiary.id()).toUri();
+        URI uri = uriBuilder.path("/beneficiary/{id}").buildAndExpand(beneficiary.id()).toUri();
         return ResponseEntity.created(uri).body(beneficiary);
     }
 

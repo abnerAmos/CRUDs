@@ -3,24 +3,20 @@ package com.study.security.config;
 import com.study.security.exceptions.BeneficiaryNotFoundException;
 import com.study.security.exceptions.BeneficiaryNotSaveException;
 import com.study.security.exceptions.DocumentNotFoundException;
-import com.study.security.exceptions.TokenNullException;
+import com.study.security.exceptions.TokenExpiredOrNullException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
 @Slf4j
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@ControllerAdvice
-public class ExceptionHandlerConfig extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class ExceptionHandlerConfig {
 
     @ExceptionHandler(BeneficiaryNotFoundException.class)
     public ResponseEntity<StandartError> beneficiaryNotFoundException(BeneficiaryNotFoundException e, HttpServletRequest request) {
@@ -49,12 +45,22 @@ public class ExceptionHandlerConfig extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(TokenNullException.class)
-    @ResponseBody public ResponseEntity<StandartError> tokenNullException(TokenNullException e, HttpServletRequest request) {
-        String error = "Header Authorization não possui token.";
+    @ExceptionHandler(TokenExpiredOrNullException.class)
+    public ResponseEntity<StandartError> tokenNullException(TokenExpiredOrNullException e, HttpServletRequest request) {
+        String error = "Header Authorization nulo ou não possui token.";
         HttpStatus status = HttpStatus.UNAUTHORIZED;
         StandartError err = new StandartError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         log.error("ERRO :: " + e.getMessage());
         return ResponseEntity.status(status).body(err);
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationError> methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        String error = "Campo obrigatório inválido.";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ValidationError err = new ValidationError(Instant.now(), status.value(), error, request.getRequestURI(), e.getFieldErrors());
+        log.error("ERRO :: " + e.getMessage());
+        return ResponseEntity.status(status).body(err);
+    }
+
 }
