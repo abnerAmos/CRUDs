@@ -1,6 +1,7 @@
 package com.study.security.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -21,6 +23,11 @@ public class SecurityConfig {
 
     @Autowired
     SecurityFilter securityFilter;
+
+    @Autowired
+    @Qualifier("delegatedAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint;
+
 
     /* Desabilita as configuraçoes padrões do SpringSecurity StateFul,
      para conseguirmos fazer a configuçao manual Stateless*/
@@ -32,6 +39,9 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.anyRequest().authenticated();
                 })
+                .exceptionHandling(exceptionHandlingConfigurer -> {
+                    exceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint);
+                }) // Responsável por delegar a excessão para o ExceptionHandler.
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o o filtro customizado para ser chamado antes do filtro do Spring
                 .build();
     }

@@ -4,9 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.study.security.exceptions.TokenExpiredOrNullException;
 import com.study.security.model.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -41,7 +41,8 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e){
-            throw new TokenExpiredOrNullException("Token inválido ou expirado");
+            throw new AuthenticationException("Token inválido ou expirado") {
+            };
         }
     }
 
