@@ -1,4 +1,4 @@
-package com.study.security.service;
+package com.study.security.service.beneficiary;
 
 import com.study.security.dto.request.BeneficiaryRequest;
 import com.study.security.dto.response.BeneficiaryResponse;

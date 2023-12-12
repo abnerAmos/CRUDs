@@ -1,9 +1,8 @@
-package com.study.security.service.impl;
+package com.study.security.service.document;
 
 import com.study.security.exceptions.DocumentNotFoundException;
 import com.study.security.model.Document;
 import com.study.security.repository.DocumentRepository;
-import com.study.security.service.DocumentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

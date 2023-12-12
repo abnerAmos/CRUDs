@@ -39,10 +39,10 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.anyRequest().authenticated();
                 })
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o o filtro customizado para ser chamado antes do filtro do Spring
                 .exceptionHandling(exceptionHandlingConfigurer -> {
                     exceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint);
                 }) // Responsável por delegar a excessão para o ExceptionHandler.
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o o filtro customizado para ser chamado antes do filtro do Spring
                 .build();
     }
 

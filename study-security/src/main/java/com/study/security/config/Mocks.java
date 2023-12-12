@@ -32,7 +32,7 @@ public class Mocks implements CommandLineRunner {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String pass = passwordEncoder.encode("123456");
-        User user = new User(null, "username", pass);
+        User user = new User(null, "usuario@email.com", pass);
 
         Beneficiary beneficiary1 = new Beneficiary();
         beneficiary1.setName("Fulano de Tal");

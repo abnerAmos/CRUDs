@@ -1,6 +1,6 @@
 package com.study.security.controller;
 
-import com.study.security.dto.request.AuthenticationRequest;
+import com.study.security.security.AuthenticationRequest;
 import com.study.security.model.User;
 import com.study.security.security.TokenResponse;
 import com.study.security.security.TokenService;

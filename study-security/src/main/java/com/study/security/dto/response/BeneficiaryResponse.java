@@ -1,12 +1,8 @@
 package com.study.security.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.study.security.model.Beneficiary;
-import com.study.security.util.DateUtil;
 
 import java.util.List;
-
-import static com.study.security.util.DateUtil.formatDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BeneficiaryResponse(

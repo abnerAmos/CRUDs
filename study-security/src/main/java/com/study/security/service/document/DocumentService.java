@@ -1,4 +1,4 @@
-package com.study.security.service;
+package com.study.security.service.document;
 
 import com.study.security.model.Document;
 

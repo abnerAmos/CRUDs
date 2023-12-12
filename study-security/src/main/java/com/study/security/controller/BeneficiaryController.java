@@ -4,8 +4,8 @@ import com.study.security.dto.request.BeneficiaryRequest;
 import com.study.security.dto.response.BeneficiaryResponse;
 import com.study.security.model.Beneficiary;
 import com.study.security.model.Document;
-import com.study.security.service.BeneficiaryService;
-import com.study.security.service.DocumentService;
+import com.study.security.service.beneficiary.BeneficiaryService;
+import com.study.security.service.document.DocumentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;

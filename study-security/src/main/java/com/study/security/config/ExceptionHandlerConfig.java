@@ -54,20 +54,13 @@ public class ExceptionHandlerConfig {
         return ResponseEntity.status(status).body(err);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationError> methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        String error = "Campo obrigatório inválido.";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ValidationError err = new ValidationError(Instant.now(), status.value(), error, request.getRequestURI(), e.getFieldErrors());
+        log.error("ERRO :: " + e.getMessage());
+        return ResponseEntity.status(status).body(err);
+    }
 
 }
