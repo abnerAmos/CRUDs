@@ -37,12 +37,13 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll();
+                    req.requestMatchers("/h2-console/**").permitAll(); /* caso não informe o tipo do método HTTP, é liberado todos os tipos de
+                                                                                  *  requisições para URL, ** libera todos os sub-endereços */
                     req.anyRequest().authenticated();
                 })
+                .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint)) // Responsável por delegar a excessão para o ExceptionHandler.
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o o filtro customizado para ser chamado antes do filtro do Spring
-                .exceptionHandling(exceptionHandlingConfigurer -> {
-                    exceptionHandlingConfigurer.authenticationEntryPoint(authEntryPoint);
-                }) // Responsável por delegar a excessão para o ExceptionHandler.
                 .build();
     }
 
