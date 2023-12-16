@@ -1,0 +1,56 @@
+<section class="container exchange ff-inter">
+  <header class="header">
+    <h2>Cotações de Moedas</h2>
+  </header>
+
+  <form>
+    <select name="code" class="select" [(ngModel)]="selectCode">
+      <option selected hidden>Selecione a Moeda:</option>
+      <option *ngFor="let code of codes" class="options">
+        {{ code }}
+      </option>
+    </select>
+
+    <select name="date" class="select" [(ngModel)]="selectData">
+      <option selected hidden>Selecione uma Data:</option>
+      <option *ngFor="let date of dates" class="options">
+        {{ date }}
+      </option>
+    </select>
+
+    <button class="ff-inter" (click)="onGetDocuments(selectData, selectCode)">Buscar</button>
+  </form>
+
+  <div *ngFor="let document of documents">
+    <table class="table-head">
+      <tr>
+        <th>
+            Documento: <p>{{ document.documentNumber }}</p>
+        </th>
+        <th>
+            Nota Fiscal: <p>{{ document.invoice }}</p>
+        </th>
+        <th>
+            Valor: <p>$ {{ document.docValue }}</p>
+        </th>
+      </tr>
+    </table>
+    <table class="table-head-quotation">
+      <tr>
+        <th>Data</th>
+        <th>Código</th>
+        <th>Moeda</th>
+        <th>Cotação</th>
+        <th>Total Nota</th>
+      </tr>
+      <tr *ngFor="let quotation of document.quotations">
+        <td> {{ quotation.quotationDate }} </td>
+        <td> {{ quotation.currencyCode }} </td>
+        <td> {{ quotation.currencyDescription }} </td>
+        <td>$ {{ quotation.quotationValue }} </td>
+        <td><b>$ {{ quotation.totalExchange }}</b> </td>
+      </tr>
+    </table>
+  </div>
+
+</section>

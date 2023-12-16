@@ -1,0 +1,20 @@
+footer {
+  background-image: url(/assets/imagens-angular/fundo-rodape.png);
+  padding: 1rem 2rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+small {
+  color: white;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  footer {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+}
